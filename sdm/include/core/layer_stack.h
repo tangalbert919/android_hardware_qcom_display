@@ -46,6 +46,10 @@
 #include "layer_buffer.h"
 #include "sdm_types.h"
 
+#ifdef UDFPS_ZPOS
+#include <display/drm/sde_drm.h>
+#endif
+
 namespace sdm {
 
 /*! @brief This enum represents display layer blending types.
@@ -234,6 +238,14 @@ struct LayerFlags {
                               //!< This flag is reserved(4) for private usage
       uint32_t has_metadata_refresh_rate : 1;
                               //!< This flag is used to mark if layer uses metadata refresh rate
+
+#ifdef UDFPS_ZPOS
+      uint32_t reserved : 23;      //!< This flag reserves the remaining 4 * 8 - (8 + 1) bits to
+                                   //!< avoid future ABI breakage
+
+      uint32_t fod_pressed : 1;    //!< This flag shall be set internally to mark the fod pressed
+                                   //!< layer
+#endif
     };
 
     uint32_t flags = 0;       //!< For initialization purpose only.
