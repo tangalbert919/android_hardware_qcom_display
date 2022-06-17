@@ -3399,21 +3399,21 @@ bool omx_vdec::execute_omx_flush(OMX_U32 flushType)
     struct v4l2_decoder_cmd dec;
     DEBUG_PRINT_LOW("in %s, flushing %u", __func__, (unsigned int)flushType);
     memset((void *)&v4l2_buf,0,sizeof(v4l2_buf));
-#ifndef _TARGET_KERNEL_VERSION_49_
-    dec.cmd = V4L2_DEC_QCOM_CMD_FLUSH;
-#else
+//#ifndef _TARGET_KERNEL_VERSION_49_
+//    dec.cmd = V4L2_DEC_QCOM_CMD_FLUSH;
+//#else
     dec.cmd = V4L2_QCOM_CMD_FLUSH;
-#endif
+//#endif
 
     DEBUG_PRINT_HIGH("in %s: reconfig? %d", __func__, in_reconfig);
 
     if (in_reconfig && flushType == OMX_CORE_OUTPUT_PORT_INDEX) {
         output_flush_progress = true;
-#ifndef _TARGET_KERNEL_VERSION_49_
-            dec.flags = V4L2_DEC_QCOM_CMD_FLUSH_CAPTURE;
-#else
+//#ifndef _TARGET_KERNEL_VERSION_49_
+//            dec.flags = V4L2_DEC_QCOM_CMD_FLUSH_CAPTURE;
+//#else
             dec.flags = V4L2_QCOM_CMD_FLUSH_CAPTURE;
-#endif
+//#endif
     } else {
         /* XXX: The driver/hardware does not support flushing of individual ports
          * in all states. So we pretty much need to flush both ports internally,
@@ -3422,11 +3422,11 @@ bool omx_vdec::execute_omx_flush(OMX_U32 flushType)
          * we automatically omit sending the FLUSH done for the "opposite" port. */
         input_flush_progress = true;
         output_flush_progress = true;
-#ifndef _TARGET_KERNEL_VERSION_49_
-        dec.flags = V4L2_DEC_QCOM_CMD_FLUSH_OUTPUT | V4L2_DEC_QCOM_CMD_FLUSH_CAPTURE;
-#else
+//#ifndef _TARGET_KERNEL_VERSION_49_
+//        dec.flags = V4L2_DEC_QCOM_CMD_FLUSH_OUTPUT | V4L2_DEC_QCOM_CMD_FLUSH_CAPTURE;
+//#else
         dec.flags = V4L2_QCOM_CMD_FLUSH_OUTPUT | V4L2_QCOM_CMD_FLUSH_CAPTURE;
-#endif
+//#endif
         request_perf_level(VIDC_TURBO);
     }
 
@@ -4145,10 +4145,13 @@ OMX_ERRORTYPE  omx_vdec::get_parameter(OMX_IN OMX_HANDLETYPE     hComp,
                     case V4L2_MPEG_VIDEO_H264_LEVEL_5_2:
                         pParam->eLevel = OMX_VIDEO_AVCLevel52;
                         break;
-#ifdef _TARGET_KERNEL_VERSION_49_
-                    case V4L2_MPEG_VIDEO_H264_LEVEL_UNKNOWN:
-                        return OMX_ErrorUnsupportedIndex;
-#endif
+//#ifdef _TARGET_KERNEL_VERSION_49_
+//                    case V4L2_MPEG_VIDEO_H264_LEVEL_UNKNOWN:
+//                        return OMX_ErrorUnsupportedIndex;
+//#endif
+                    default:
+                        eRet = OMX_ErrorUnsupportedIndex;
+                        break;
                 }
              } else {
                  eRet = OMX_ErrorUnsupportedIndex;
