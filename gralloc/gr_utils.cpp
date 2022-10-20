@@ -32,7 +32,6 @@
 #endif
 
 #ifndef QMAA
-#include <display/drm/sde_drm.h>
 #include <drm/drm_fourcc.h>
 #endif
 
